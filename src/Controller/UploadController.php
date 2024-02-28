@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UploadController  extends AbstractController {
 
-    #[Route('/upload',name:"upload")]    
+    #[Route('/upload',name:"upload",methods:"POST")]    
     public function uploadAction(Request $request) :  JsonResponse {
         return new JsonResponse([
-            "success"=> true
+            "success" => true
         ]);
     }
 

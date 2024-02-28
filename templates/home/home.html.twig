@@ -5,14 +5,27 @@
 <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
     <h3>Upload form</h3>
 </div>
-<form>
+
+<div class="alert alert-info hide" id="info">
+  <strong>Info!</strong> A Request has been sent... 
+</div>
+
+<div class="alert alert-success hide" id="success">
+  <strong>A Success!</strong>   A new entry has been added.
+</div>
+
+<div class="alert alert-danger hide"  id="error">
+  <strong>Error!</strong> We are sorry, an issue occured during resolving your request. Try again later
+</div>
+
+<form id="uploadForm" action="/upload">
     <div class="mb-3">
         <label for="name" class="form-label">Your name</label>
-        <input id="name" class="form-control" type="text" placeholder="Name" aria-label="default input example">
+        <input id="name" class="form-control" type="text" placeholder="Name" aria-label="default input example" required>
     </div>
     <div class="mb-3">
         <label for="surname" class="form-label">Your surname</label>
-        <input class="form-control" type="text" placeholder="Surname" aria-label="default input example"> 
+        <input class="form-control" type="text" placeholder="Surname" aria-label="default input example" required> 
     </div>
     <div class="mb-3">
         <label for="formFile" class="form-label">Choose file</label>
