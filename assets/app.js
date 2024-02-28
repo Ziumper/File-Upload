@@ -35,11 +35,15 @@ $(function() {
         var actionurl = e.currentTarget.action;
         me.showElement(me.elements.info);
 
-        var data = new FormData();
+        var dataForm = new FormData();
+        dataForm.append("testKey", "testValue");
         
         $.ajax({
                 url: actionurl,
                 type: 'post',
+                data: dataForm,
+                processData: false,
+                contentType: false,
                 dataType: 'text',
                 success: function() {
                     me.hideElement(me.elements.info);

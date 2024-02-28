@@ -13,7 +13,7 @@ class UploadController  extends AbstractController {
     #[Route('/upload',name:"upload",methods:"POST")]    
     public function uploadAction(Request $request) :  JsonResponse {
         return new JsonResponse([
-            "success" => true
+            "success" =>  $request->getPayload()->get('testKey', 'default category')
         ]);
     }
 
