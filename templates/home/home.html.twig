@@ -2,20 +2,22 @@
 
 {% block body %} 
 {{ parent() }}
-    <form>
-        <div>
-            <label>Name: </label>
-            <input type="text" required />
-        </div>
-        <div>
-            <label>Surname: </label>
-            <input type="text" required />
-        </div>
-        <div>
-            <input type="file" />
-        </div>
-        <div>
-            <button>Submit</button>
-        </div>
-    </form>
+<div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+    <h3>Upload form</h3>
+</div>
+<form>
+    <div class="mb-3">
+        <label for="name" class="form-label">Your name</label>
+        <input id="name" class="form-control" type="text" placeholder="Name" aria-label="default input example">
+    </div>
+    <div class="mb-3">
+        <label for="surname" class="form-label">Your surname</label>
+        <input class="form-control" type="text" placeholder="Surname" aria-label="default input example"> 
+    </div>
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Choose file</label>
+        <input class="form-control" type="file" id="formFile">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}
