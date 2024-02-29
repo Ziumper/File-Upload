@@ -3,8 +3,10 @@
 namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 
 class UploadControllerTest extends WebTestCase
 {
@@ -35,12 +37,10 @@ class UploadControllerTest extends WebTestCase
 
     public function testUploadSuccess(): void 
     {
-        $myfile = fopen("newfile.jpg","w");
-        fwrite($myfile,"dasasasdaddddasddasdasdasdasasddasdasda");
-
-        $file = new UploadedFile("newfile.jpg","newFile.jpg",null,null,true);
-        
-        var_dump($file->getClientOriginalName());
+        $imageManager = new ImageManager(new ImagickDriver()); // Tutaj możesz użyć odpowiedniego sterownika obrazu, na przykład 'gd', 'imagick' itp.
+        $tempFilePath = sys_get_temp_dir() . '/sample_image.jpg';
+        $imageManager->create(100,100)->save($tempFilePath);
+        $file = new UploadedFile($tempFilePath,"sample_image.jpg",null,null,true);
         $client = static::createClient();
         
         $client->request('POST','/upload',
@@ -53,8 +53,8 @@ class UploadControllerTest extends WebTestCase
         ]);
 
         $response = $client->getResponse();
-        
         $this->assertEquals(200,$response->getStatusCode(),$response->getContent());
+        unlink($tempFilePath);
     }
 
     public function testFileUploadWithWrongExtension(): void {
