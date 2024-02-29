@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UploadEntryDto {
 
     public function __construct(
-        #[Assert\NotBlank]
+        #[Assert\NotBlank(message:"Field name is blank")]
         public readonly string $name,
-        #[Assert\NotBlank]
+        #[Assert\NotBlank(message:"Field surname is blank")]
         public readonly string $surname,
         #[Assert\File(maxSize:"2M",  extensions: ['jpg','png','gif','jpeg'])]
         public readonly ?File $file = null

@@ -14,7 +14,10 @@ class UploadController  extends AbstractController {
 
     #[Route('/upload',name:"upload",methods:"POST")]    
     public function uploadAction(
-        #[MapRequestPayload] UploadEntryDto $uploadEntryDto
+        #[MapRequestPayload
+        (
+            resolver: ArgumentResolver\UploadEntryValueResolver::class
+        )] UploadEntryDto $uploadEntryDto
     ) :  JsonResponse {
         return new JsonResponse([
             "success" =>  $uploadEntryDto->name
