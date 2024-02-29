@@ -26,6 +26,7 @@ class UploadEntryServiceTest extends KernelTestCase
 
     public function testUploadImage(): void 
     {
+        $fileNameToSearch = "sample-image";
         $imageManager = new ImageManager(new ImagickDriver()); 
         $tempFilePath = sys_get_temp_dir() . '/sample_image.jpg';
         $imageManager->create(100,100)->save($tempFilePath);
@@ -35,8 +36,18 @@ class UploadEntryServiceTest extends KernelTestCase
         $uploadService = $this->getUploadEntryService();
         $uploadService->uploadEntry($uploadEntry);
         $uploadPath = $uploadService->getUploadDirectoryPath();
+        $filesInFolder = scandir($uploadPath);
+      
+        $matchingFiles = array_filter($filesInFolder, function($file) use ($fileNameToSearch) {
+            return str_contains($file,$fileNameToSearch);
+        });
 
-        $this->assertEquals($uploadPath,$uploadEntry->file->getPath());
+        $this->assertTrue(count($matchingFiles) > 0);
+
+        foreach ($matchingFiles as $file) 
+        {
+            unlink("$uploadPath/$file");
+        }
     }
 
     private function mockRepostiory(): void 
