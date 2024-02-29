@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Dto\UploadEntryDto;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,9 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 class UploadController  extends AbstractController {
 
     #[Route('/upload',name:"upload",methods:"POST")]    
-    public function uploadAction(Request $request) :  JsonResponse {
+    public function uploadAction(
+        #[MapRequestPayload] UploadEntryDto $uploadEntryDto
+    ) :  JsonResponse {
         return new JsonResponse([
-            "success" =>  $request->getPayload()->get('testKey', 'default category')
+            "success" =>  $uploadEntryDto->name
         ]);
     }
 

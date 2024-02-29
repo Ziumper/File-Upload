@@ -36,7 +36,8 @@ $(function() {
         me.showElement(me.elements.info);
 
         var dataForm = new FormData();
-        dataForm.append("testKey", "testValue");
+        dataForm.append("name", "testName");
+        dataForm.append("surname", "testSurname");
         
         $.ajax({
                 url: actionurl,
