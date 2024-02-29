@@ -37,7 +37,7 @@ $(function() {
 
         var dataForm = new FormData();
         dataForm.append("name", "testName");
-        dataForm.append("surname", "testSurname");
+        dataForm.append("surname", "testSurname")
         
         $.ajax({
                 url: actionurl,

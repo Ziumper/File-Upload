@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Dto;
-
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UploadEntryDto {
@@ -13,7 +12,7 @@ class UploadEntryDto {
         #[Assert\NotBlank(message:"Field surname is blank")]
         public readonly string $surname,
         #[Assert\File(maxSize:"2M",  extensions: ['jpg','png','gif','jpeg'])]
-        public readonly ?File $file = null
+        public readonly ?UploadedFile $file = null
     ) {
     }
 }
