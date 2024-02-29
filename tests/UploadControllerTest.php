@@ -4,7 +4,6 @@ namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 
@@ -37,7 +36,7 @@ class UploadControllerTest extends WebTestCase
 
     public function testUploadSuccess(): void 
     {
-        $imageManager = new ImageManager(new ImagickDriver()); // Tutaj możesz użyć odpowiedniego sterownika obrazu, na przykład 'gd', 'imagick' itp.
+        $imageManager = new ImageManager(new ImagickDriver());
         $tempFilePath = sys_get_temp_dir() . '/sample_image.jpg';
         $imageManager->create(100,100)->save($tempFilePath);
         $file = new UploadedFile($tempFilePath,"sample_image.jpg",null,null,true);
@@ -74,6 +73,6 @@ class UploadControllerTest extends WebTestCase
         ]);
 
         $this->assertEquals(422,$client->getResponse()->getStatusCode());
-        unlink($file->getRealPath());
+        unlink("newfile.txt");
     }
 }

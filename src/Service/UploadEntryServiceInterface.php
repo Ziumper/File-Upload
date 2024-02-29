@@ -6,4 +6,5 @@ use App\Dto\UploadEntryDto;
 
 interface UploadEntryServiceInterface {
     public function uploadEntry(UploadEntryDto $dto): bool;
+    public function getUploadDirectoryPath(): string;
 }

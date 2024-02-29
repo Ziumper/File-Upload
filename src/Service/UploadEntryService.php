@@ -2,14 +2,14 @@
 namespace App\Service;
 
 use App\Dto\UploadEntryDto;
-use App\Repository\UploadEntryRepository;
 use App\Repository\UploadEntryRepositoryInterface;
 use App\Entity\UploadEntry;
 
 class UploadEntryService implements UploadEntryServiceInterface 
 {
     public function __construct(
-        private readonly UploadEntryRepositoryInterface $uploadEntryRepository
+        private readonly UploadEntryRepositoryInterface $uploadEntryRepository,
+        private readonly string $uploadDirectory
     ) {}
 
     public function uploadEntry(UploadEntryDto $uploadEntryDto): bool 
@@ -27,5 +27,9 @@ class UploadEntryService implements UploadEntryServiceInterface
 
         $this->uploadEntryRepository->save($uploadEntry);
         return true;
+    }
+
+    public function getUploadDirectoryPath(): string {
+        return $this->uploadDirectory;
     }
 }
