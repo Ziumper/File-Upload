@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\UploadEntry;
+use App\Repository\UploadEntryRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,11 +15,16 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method UploadEntry[]    findAll()
  * @method UploadEntry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UploadEntryRepository extends ServiceEntityRepository
+class UploadEntryRepository extends ServiceEntityRepository implements UploadEntryRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UploadEntry::class);
+    }
+
+    public function save(UploadEntry $uploadEntry): bool 
+    {
+        return false;
     }
 
     //    /**

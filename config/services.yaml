@@ -28,4 +28,9 @@ services:
     App\EventListener\ExceptionListener:
         tags: 
             - kernel.event_listener
+    App\Service\UploadEntryServiceInterface:
+        class: App\Service\UploadEntryService
+        public: true
+    App\Repository\UploadEntryRepositoryInterface:
+        class: App\Service\UploadEntryRepository
     
