@@ -14,7 +14,10 @@ $(function() {
         form : "#uploadForm",
         success: '#success',
         error: "#error",
-        info: "#info"
+        info: "#info",
+        name: "#name",
+        surname: "#surname",
+        file: "#formFile"
     }
 
     me.hideElement = function(selector) {
@@ -36,16 +39,18 @@ $(function() {
         me.showElement(me.elements.info);
 
         var dataForm = new FormData();
-        dataForm.append("name", "testName");
-        dataForm.append("surname", "testSurname")
+        dataForm.append("name", $(me.elements.name).val());
+        dataForm.append("surname", $(me.elements.surname).val());
+        dataForm.append("file",$(me.elements.file)[0].files[0]); 
         
         $.ajax({
                 url: actionurl,
                 type: 'post',
+                cache: false,
+                async: true,
                 data: dataForm,
                 processData: false,
                 contentType: false,
-                dataType: 'text',
                 success: function() {
                     me.hideElement(me.elements.info);
                     me.showElement(me.elements.success);
