@@ -34,6 +34,6 @@ services:
         arguments:
             $uploadDirectory: '%kernel.project_dir%/public/uploads/images'
     App\Repository\UploadEntryRepositoryInterface:
-        class: App\Service\UploadEntryRepository
+        class: App\Repository\UploadEntryRepository
         
     

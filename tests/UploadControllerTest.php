@@ -2,16 +2,28 @@
 
 namespace App\Tests;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
+use App\Service\UploadEntryServiceInterface;
 
 class UploadControllerTest extends WebTestCase
 {
+
+    private function mockUploadService() {
+        $container = $this->getContainer();
+
+        $uploadService = $this->createMock(UploadEntryServiceInterface::class);
+        $uploadService->expects(self::once())->method('uploadEntry')->willReturn(true);
+        $container->set(UploadEntryServiceInterface::class,$uploadService);
+    }
+
     public function testUploadEntry(): void
     {
         $client = static::createClient();
+        $this->mockUploadService();
         $client->request('POST', '/upload',
         [
             'name' => 'Test Name',
@@ -41,7 +53,7 @@ class UploadControllerTest extends WebTestCase
         $imageManager->create(100,100)->save($tempFilePath);
         $file = new UploadedFile($tempFilePath,"sample_image.jpg",null,null,true);
         $client = static::createClient();
-        
+        $this->mockUploadService();        
         $client->request('POST','/upload',
         [
             "name" => 'TestName',

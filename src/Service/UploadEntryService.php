@@ -19,7 +19,7 @@ class UploadEntryService implements UploadEntryServiceInterface
         $uploadEntry = new UploadEntry();
 
         $file = $uploadEntryDto->file;
-        if($file != null) {
+        if(!empty($file)) {
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $this->slugger->slug($originalFilename);
             $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
