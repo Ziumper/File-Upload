@@ -6,3 +6,7 @@ body {
 .hide {
     display: none !important;
 }
+
+.image-constraint {
+    max-height: 200px;
+}

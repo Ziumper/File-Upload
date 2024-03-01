@@ -25,7 +25,7 @@
       <td>{{ entry.surname }}</td>
       <td> 
       {% if  entry.fileName %}
-            <img class="img-thumbnail"  src="{{ asset('uploads/images/' ~ entry.fileName) }}"/>
+            <img class="img-thumbnail image-constraint"  src="{{ asset('uploads/images/' ~ entry.fileName) }}"/>
         {% else %}
             No image
         {% endif %}
