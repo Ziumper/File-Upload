@@ -20,20 +20,27 @@
   <strong>Error!</strong> We are sorry, an issue occured during resolving your request. Try again later
 </div>
 
-<form id="uploadForm" action="/upload">
+<form id="uploadForm" action="/upload" class="need-validation" novalidate>
     <div class="mb-3">
         <label for="name" class="form-label">Your name</label>
         <input id="name" class="form-control" type="text" placeholder="Name" aria-label="default input example" required>
+        <div class="valid-feedback">Valid</div>
+        <div class="invalid-feedback">Please provide, your name</div>
     </div>
     <div class="mb-3">
         <label for="surname" class="form-label">Your surname</label>
-        <input id="surname" class="form-control" type="text" placeholder="Surname" aria-label="default input example" required> 
+        <input id="surname" class="form-control" type="text" placeholder="Surname" aria-label="default input example" required>
+        <div class="valid-feedback">Valid</div>
+        <div class="invalid-feedback">Please provide, your surname</div>
     </div>
     <div class="mb-3">
         <label for="formFile" class="form-label">Choose file</label>
         <input class="form-control" type="file" id="formFile">
+        <div class="valid-feedback">Valid</div>
+        <div id="fileInvalidMessage" class="invalid-feedback">Example invalid form file feedback</div>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
+    
 </form>
 <ul class="nav">
   <li class="nav-item">

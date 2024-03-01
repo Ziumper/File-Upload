@@ -23,7 +23,13 @@
       <th scope="row">{{ loop.index }} </th>
       <td>{{ entry.name }}</td>
       <td>{{ entry.surname }}</td>
-      <td><img class="img-thumbnail"  src="{{ asset('uploads/images/' ~ entry.fileName) }}"/></td>
+      <td> 
+      {% if  entry.fileName %}
+            <img class="img-thumbnail"  src="{{ asset('uploads/images/' ~ entry.fileName) }}"/>
+        {% else %}
+            No image
+        {% endif %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>
