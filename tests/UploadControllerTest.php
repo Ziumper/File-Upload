@@ -10,42 +10,6 @@ use App\Service\UploadEntryServiceInterface;
 
 class UploadControllerTest extends WebTestCase
 {
-
-    public function testUploadsListAction(): void {
-        $entriesAmount = 10;
-        $entries = $this->createReturnUploadEntries($entriesAmount);
-        $client = static::createClient();
-        $container = $this->getContainer();
-        $uploadService = $this->createMock(UploadEntryServiceInterface::class);
-        $uploadService->expects(self::once())->method('getAllEntries')->willReturn($entries);
-        $container->set(UploadEntryServiceInterface::class,$uploadService);
-        
-        $client->request("GET", "/uploadsList");
-        $this->assertResponseIsSuccessful();
-        
-        $response = $client->getResponse();
-        $content = $response->getContent();
-        $objects = json_decode($content)->data;
-        $this->assertCount($entriesAmount,$objects);
-        
-        for($i=0; $i<$entriesAmount; $i++) {
-            $object = $objects[$i];
-            $entry = $entries[$i];
-            $this->assertEquals($object->name,$entry->name);
-            $this->assertEquals($object->surname,$entry->surname);
-            $this->assertEquals($object->fileName,$entry->fileName);
-        }
-    }
-    
-    private function createReturnUploadEntries($entriesAmount): array {
-        $entries = [];
-        for($i = 0; $i < $entriesAmount; $i++) {
-            $entry = new \App\Dto\ReturnUploadEntryDto("testName$i","testSurname$i","testFileName$i.jpg");
-            $entries[] = $entry;
-        }
-        return $entries;
-    }
-
     public function testUploadEntry(): void
     {
         $client = static::createClient();

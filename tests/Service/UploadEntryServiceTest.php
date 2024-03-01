@@ -55,7 +55,6 @@ class UploadEntryServiceTest extends KernelTestCase
 
     private function getUploadEntry(string $name, string $surname, string $imageName, string $imageExtension): UploadEntry {
         $uploadEntry = new UploadEntry();
-
         $uploadEntry->setName($name);
         $uploadEntry->setSurname($surname);
         $uploadEntry->setImageName($imageName);

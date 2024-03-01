@@ -22,12 +22,4 @@ class UploadController  extends AbstractController {
             "success" =>  $this->uploadEntryService->uploadEntry($uploadEntryDto)    
         ]);
     }
-    
-    #[Route("/uploadsList", name:"uploads_list", methods:"GET")]
-    public function uploadsListAction(): JsonResponse {
-        return new JsonResponse([
-            "data" => $this->uploadEntryService->getAllEntries()
-        ]);
-    }
-
 }

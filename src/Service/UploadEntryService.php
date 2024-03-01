@@ -40,9 +40,11 @@ class UploadEntryService implements UploadEntryServiceInterface
         $dtos = array();
         $uploadedEntries = $this->uploadEntryRepository->fetchAll();
         foreach($uploadedEntries as $uploadedEntry) {
+           $imageName = $uploadedEntry->getImageName() != null ? $uploadedEntry->getImageName() : "";
+           
            $dto = new ReturnUploadEntryDto($uploadedEntry->getName(),
                    $uploadedEntry->getSurname(),
-                   $uploadedEntry->getImageName());
+                   $imageName);
            
             $dtos[] = $dto;
         }

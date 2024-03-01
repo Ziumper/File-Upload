@@ -27,6 +27,11 @@
 	}
 
 	root * /app/public
+
+        basicauth /list {
+		Bob $2a$14$rm0dxwlGld/sgHECSjCpSeB6gsG/em1XA1w.xJPg0G1EjFEX8FED6
+        }
+
 	encode zstd br gzip
 
 	mercure {

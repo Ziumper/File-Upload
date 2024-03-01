@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %} 
+    <h1>List View</h1>
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link" href="/">Back To Form</a>
+    </li>
+</ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Surname</th>
+      <th scope="col">Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in entries %}
+    <tr>
+      <th scope="row">{{ loop.index }} </th>
+      <td>{{ entry.name }}</td>
+      <td>{{ entry.surname }}</td>
+      <td><img class="img-thumbnail"  src="{{ asset('uploads/images/' ~ entry.fileName) }}"/></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
