@@ -25,6 +25,7 @@ class UploadEntryRepository extends ServiceEntityRepository implements UploadEnt
     public function save(UploadEntry $uploadEntry): bool 
     {
         $this->getEntityManager()->persist($uploadEntry);
+        $this->getEntityManager()->flush();
         return true;
     }
 
