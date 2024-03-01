@@ -4,14 +4,13 @@ namespace App\Service;
 use App\Dto\UploadEntryDto;
 use App\Repository\UploadEntryRepositoryInterface;
 use App\Entity\UploadEntry;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UploadEntryService implements UploadEntryServiceInterface 
 {
     public function __construct(
         private readonly UploadEntryRepositoryInterface $uploadEntryRepository,
         private readonly string $uploadDirectory,
-        private SluggerInterface $slugger
+        private readonly FileUploadServiceInterface $fileUpload
     ) {}
 
     public function uploadEntry(UploadEntryDto $uploadEntryDto): bool 
@@ -20,12 +19,9 @@ class UploadEntryService implements UploadEntryServiceInterface
 
         $file = $uploadEntryDto->file;
         if(!empty($file)) {
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = $this->slugger->slug($originalFilename);
-            $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-            $movedfile = $file->move($this->getUploadDirectoryPath(),$fileName);
-            $uploadEntry->setImageName($movedfile->getFilename());
-            $uploadEntry->setImageExtension($movedfile->getExtension());
+            $file = $this->fileUpload->upload($file, $this->getUploadDirectoryPath());
+            $uploadEntry->setImageName($file->getFilename());
+            $uploadEntry->setImageExtension($file->getExtension());
         }
 
         $uploadEntry->setName($uploadEntryDto->name);
