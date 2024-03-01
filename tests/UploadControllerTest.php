@@ -2,7 +2,6 @@
 
 namespace App\Tests;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
@@ -12,18 +11,45 @@ use App\Service\UploadEntryServiceInterface;
 class UploadControllerTest extends WebTestCase
 {
 
-    private function mockUploadService() {
+    public function testUploadsListAction(): void {
+        $entriesAmount = 10;
+        $entries = $this->createReturnUploadEntries($entriesAmount);
+        $client = static::createClient();
         $container = $this->getContainer();
-
         $uploadService = $this->createMock(UploadEntryServiceInterface::class);
-        $uploadService->expects(self::once())->method('uploadEntry')->willReturn(true);
+        $uploadService->expects(self::once())->method('getAllEntries')->willReturn($entries);
         $container->set(UploadEntryServiceInterface::class,$uploadService);
+        
+        $client->request("GET", "/uploadsList");
+        $this->assertResponseIsSuccessful();
+        
+        $response = $client->getResponse();
+        $content = $response->getContent();
+        $objects = json_decode($content)->data;
+        $this->assertCount($entriesAmount,$objects);
+        
+        for($i=0; $i<$entriesAmount; $i++) {
+            $object = $objects[$i];
+            $entry = $entries[$i];
+            $this->assertEquals($object->name,$entry->name);
+            $this->assertEquals($object->surname,$entry->surname);
+            $this->assertEquals($object->fileName,$entry->fileName);
+        }
+    }
+    
+    private function createReturnUploadEntries($entriesAmount): array {
+        $entries = [];
+        for($i = 0; $i < $entriesAmount; $i++) {
+            $entry = new \App\Dto\ReturnUploadEntryDto("testName$i","testSurname$i","testFileName$i.jpg");
+            $entries[] = $entry;
+        }
+        return $entries;
     }
 
     public function testUploadEntry(): void
     {
         $client = static::createClient();
-        $this->mockUploadService();
+        $this->mockUploadServiceAndUploadEntryMethod();
         $client->request('POST', '/upload',
         [
             'name' => 'Test Name',
@@ -53,7 +79,7 @@ class UploadControllerTest extends WebTestCase
         $imageManager->create(100,100)->save($tempFilePath);
         $file = new UploadedFile($tempFilePath,"sample_image.jpg",null,null,true);
         $client = static::createClient();
-        $this->mockUploadService();        
+        $this->mockUploadServiceAndUploadEntryMethod();        
         $client->request('POST','/upload',
         [
             "name" => 'TestName',
@@ -86,5 +112,13 @@ class UploadControllerTest extends WebTestCase
 
         $this->assertEquals(422,$client->getResponse()->getStatusCode());
         unlink("newfile.txt");
+    }
+    
+    private function mockUploadServiceAndUploadEntryMethod() {
+        $container = $this->getContainer();
+
+        $uploadService = $this->createMock(UploadEntryServiceInterface::class);
+        $uploadService->expects(self::once())->method('uploadEntry')->willReturn(true);
+        $container->set(UploadEntryServiceInterface::class,$uploadService);
     }
 }
