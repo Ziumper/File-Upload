@@ -18,15 +18,15 @@ $(function() {
         name: "#name",
         surname: "#surname",
         file: "#formFile"
-    }
+    };
 
     me.hideElement = function(selector) {
-        $(selector).addClass("hide")
-    }
+        $(selector).addClass("hide");
+    };
 
     me.showElement = function(selector) {
         $(selector).removeClass("hide");
-    }
+    };
 
     $(me.elements.form).submit(function(e) {
         me.hideElement(me.elements.success);
@@ -34,6 +34,7 @@ $(function() {
 
         //prevent Default functionality
         e.preventDefault();
+        
         //get the action-url of the form
         var actionurl = e.currentTarget.action;
         me.showElement(me.elements.info);
