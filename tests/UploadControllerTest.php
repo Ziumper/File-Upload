@@ -5,6 +5,7 @@ namespace App\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Facades\Image;
 use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
 use App\Service\UploadEntryServiceInterface;
 
@@ -36,6 +37,7 @@ class UploadControllerTest extends WebTestCase
         $this->assertEquals(422,$client->getResponse()->getStatusCode());
     }
 
+   
     public function testUploadSuccess(): void 
     {
         $imageManager = new ImageManager(new ImagickDriver());
@@ -77,6 +79,27 @@ class UploadControllerTest extends WebTestCase
         $this->assertEquals(422,$client->getResponse()->getStatusCode());
         unlink("newfile.txt");
     }
+
+    public function testUploadFailWithImageTooBig(): void {
+        $imageManager = new ImageManager(new ImagickDriver());
+        $tempFilePath = sys_get_temp_dir() . '/sample_image.jpg';
+        $imageManager->create(59999,9999)->save($tempFilePath); //it's above 2,23 MB
+        $file = new UploadedFile($tempFilePath,"sample_image.jpg",null,null,true);
+        $client = static::createClient();
+        $client->request('POST','/upload',
+        [
+            "name" => 'TestName',
+            "surname" => "TestSurname",
+            "mimeType"=> "image/jpeg"
+        ],[
+            "file" => $file
+        ]);
+
+        $response = $client->getResponse();
+        $this->assertEquals(422,$response->getStatusCode(),"File size in MB:". $file->getSize()/(1024*1024));
+        unlink($tempFilePath);
+    }
+
     
     private function mockUploadServiceAndUploadEntryMethod() {
         $container = $this->getContainer();
