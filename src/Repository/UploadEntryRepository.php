@@ -30,4 +30,8 @@ class UploadEntryRepository extends ServiceEntityRepository implements UploadEnt
         return true;
     }
 
+    
+    public function fetchAll(): array {
+      return $this->findAll();
+    }
 }

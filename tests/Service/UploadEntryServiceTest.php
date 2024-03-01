@@ -6,14 +6,10 @@ use App\Repository\UploadEntryRepositoryInterface;
 use App\Service\UploadEntryServiceInterface;
 use App\Dto\UploadEntryDto;
 use App\Entity\UploadEntry;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UploadEntryServiceTest extends KernelTestCase
 {
-    
     public function testUpload(): void
     {
         $this->mockRepostioryAndSaveMethod();
@@ -23,16 +19,38 @@ class UploadEntryServiceTest extends KernelTestCase
         $this->assertTrue($result);
     }
 
-    // public function testGetListOfEntries(): void { 
-    //     $uploadRepository = $this->createMock(UploadEntryRepositoryInterface::class);
+    public function testGetListOfEntries(): void { 
+        $objects = $this->createUploadEntryTestData();
+        $uploadRepository = $this->createMock(UploadEntryRepositoryInterface::class);
+        $uploadRepository->expects($this->once())->method("fetchAll")->willReturn($objects);
 
-    //     //$uploadRepository->expects($this->once())->method("fetchAll")->willReturn();
-    // }
+        $container = $this->getContainer();
+        $container->set(UploadEntryRepositoryInterface::class,$uploadRepository);
+        
+        $uploadEntryService = $container->get(UploadEntryServiceInterface::class);
+        $entries = $uploadEntryService->getAllEntries();
+        $this->assertCount(10,$entries);
+        
+        for($i = 0; $i < count($entries); $i++) {
+            
+            $entry = $entries[$i];
+            $object = $objects[$i];
+            
+            $this->assertEquals($entry->name, $object->getName());
+            $this->assertEquals($entry->surname, $object->getSurname());
+            $this->assertEquals($entry->fileName, $object->getImageName());
+        }
+    }
 
     private function createUploadEntryTestData(): array {
-        return [
-            
-        ];
+
+        $uploadedEntries = [];
+        for($i = 0; $i < 10;$i++) {
+            $uploadEntry = $this->getUploadEntry("testName$i","testSurname$i","image-name$i.jgp","jpg");
+            $uploadedEntries[] = $uploadEntry;
+        }
+        
+        return $uploadedEntries;
     }
 
     private function getUploadEntry(string $name, string $surname, string $imageName, string $imageExtension): UploadEntry {
@@ -40,7 +58,7 @@ class UploadEntryServiceTest extends KernelTestCase
 
         $uploadEntry->setName($name);
         $uploadEntry->setSurname($surname);
-        $uploadEntry->setImageName($imageExtension);
+        $uploadEntry->setImageName($imageName);
         $uploadEntry->setImageExtension($imageExtension);
 
         return $uploadEntry;
@@ -58,4 +76,5 @@ class UploadEntryServiceTest extends KernelTestCase
     private function getUploadEntryService(): UploadEntryServiceInterface {
         return $this->getContainer()->get(UploadEntryServiceInterface::class);        
     }
+
 }

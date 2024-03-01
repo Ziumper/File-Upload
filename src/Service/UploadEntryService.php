@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Service;
 
 use App\Dto\UploadEntryDto;
 use App\Repository\UploadEntryRepositoryInterface;
 use App\Entity\UploadEntry;
+use App\Dto\ReturnUploadEntryDto;
 
 class UploadEntryService implements UploadEntryServiceInterface 
 {
@@ -12,14 +14,15 @@ class UploadEntryService implements UploadEntryServiceInterface
         private readonly string $uploadDirectory,
         private readonly FileUploadServiceInterface $fileUpload
     ) {}
-
+    
+    #[\Override]
     public function uploadEntry(UploadEntryDto $uploadEntryDto): bool 
     {
         $uploadEntry = new UploadEntry();
 
         $file = $uploadEntryDto->file;
         if(!empty($file)) {
-            $file = $this->fileUpload->upload($file, $this->getUploadDirectoryPath());
+            $file = $this->fileUpload->upload($file, $this->uploadDirectory);
             $uploadEntry->setImageName($file->getFilename());
             $uploadEntry->setImageExtension($file->getExtension());
         }
@@ -31,7 +34,20 @@ class UploadEntryService implements UploadEntryServiceInterface
         return true;
     }
 
-    public function getUploadDirectoryPath(): string {
-        return $this->uploadDirectory;
+    #[\Override]
+    public function getAllEntries(): array
+    {
+        $dtos = array();
+        $uploadedEntries = $this->uploadEntryRepository->fetchAll();
+        foreach($uploadedEntries as $uploadedEntry) {
+           $dto = new ReturnUploadEntryDto($uploadedEntry->getName(),
+                   $uploadedEntry->getSurname(),
+                   $uploadedEntry->getImageName());
+           
+            $dtos[] = $dto;
+        }
+        
+        return $dtos;
     }
+
 }

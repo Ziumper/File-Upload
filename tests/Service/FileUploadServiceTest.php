@@ -13,11 +13,7 @@ class FileUploadServiceTest extends KernelTestCase
     public function testFileUpload(): void
     {
         $fileNameToSearch = "sample-image";
-        $imageManager = new ImageManager(new ImagickDriver()); 
-        $tempFilePath = sys_get_temp_dir() . '/sample_image.jpg';
-        $imageManager->create(100,100)->save($tempFilePath);
-        $file = new UploadedFile($tempFilePath,"sample_image.jpg",null,null,true);
-
+        $file = FileUploadServiceTest::createImage($fileNameToSearch);
         $container = $this->getContainer();
         $uploadPath = $container->getParameter("upload_directory");
 
@@ -35,5 +31,18 @@ class FileUploadServiceTest extends KernelTestCase
         {
             unlink("$uploadPath/$file");
         }
+    }
+
+    public static function createImage(string $fileName): UploadedFile {
+        $imageManager = new ImageManager(new ImagickDriver()); 
+        
+        if(!str_contains($fileName,".jpg")) {
+            $fileName = " $fileName.jpg";
+        }
+
+        $tempFilePath = sys_get_temp_dir() .$fileName;
+        $imageManager->create(100,100)->save($tempFilePath);
+        $file = new UploadedFile($tempFilePath,$fileName,null,null,true);
+        return $file;
     }
 }
