@@ -37,7 +37,7 @@ class UploadEntryService implements UploadEntryServiceInterface
     #[\Override]
     public function getAllEntries(): array
     {
-        $dtos = array();
+        $dtos = [];
         $uploadedEntries = $this->uploadEntryRepository->fetchAll();
         foreach($uploadedEntries as $uploadedEntry) {
            $imageName = $uploadedEntry->getImageName() != null ? $uploadedEntry->getImageName() : "";
